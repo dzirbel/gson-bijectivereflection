@@ -13,28 +13,48 @@ import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
 import java.lang.reflect.Field
+import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.javaField
 
 /**
- * A [TypeAdapterFactory] which overwrites the default [ReflectiveTypeAdapterFactory], which provides type adapters for
- * user-defined classes by reflecting over its fields.
+ * A [Gson] [TypeAdapterFactory] which overrides the default [ReflectiveTypeAdapterFactory] to provides stricter type
+ * adapters for user-defined classes, requiring that all JSON elements are reflected in the class and vice versa.
  *
- * The [TypeAdapter]s provided by this factory are more strict than the default [ReflectiveTypeAdapterFactory.Adapter]s;
- * they require the JSON and the classes have one-to-one fields.
- *
- * When [requireAllClassFieldsUsed] is true, every member field of a class being instantiated are required to be present
- * in the JSON, otherwise a [JsonSyntaxException] is thrown when parsing.
- *
- * When [requireAllJsonFieldsUsed] is true, every field in the JSON must be read into a class field, otherwise a
- * [JsonSyntaxException] is thrown when parsing.
+ * Like the default [ReflectiveTypeAdapterFactory], this [TypeAdapterFactory] deserializes JSON elements by reflecting
+ * over the fields of the destination class. Unlike the default [ReflectiveTypeAdapterFactory], [TypeAdapter]s provided
+ * by this factory require that the input JSON and the destination class have one-to-one fields (unless the JSON field
+ * has a null value). Serialization (writing classes to JSON) is delegated to the [ReflectiveTypeAdapterFactory].
  */
 class BijectiveReflectiveTypeAdapterFactory(
+    /**
+     * Requires that every member field of a destination class is required to be present in the JSON; default true.
+     *
+     * Nullable fields or fields annotated with [OptionalField] are omitted.
+     */
     private val requireAllClassFieldsUsed: Boolean = true,
+
+    /**
+     * Requires that for every JSON element there must be a corresponding field in the destination class; default true.
+     *
+     * If [allowUnusedNulls] is true, then if a JSON element has null value, it is not required to have an associated
+     * class field.
+     */
     private val requireAllJsonFieldsUsed: Boolean = true,
-    private val allowUnusedNulls: Boolean = true
+
+    /**
+     * Allows the input JSON to contain fields with a null value for which there is no corresponding field in the
+     * destination class.
+     */
+    private val allowUnusedNulls: Boolean = true,
+
+    /**
+     * An optional set of [KClass]es which this [TypeAdapterFactory] will deserialize into; when null (the default), it
+     * deserializes into all classes which the the default [ReflectiveTypeAdapterFactory] handles.
+     */
+    private val classes: Set<KClass<*>>? = null
 ) : TypeAdapterFactory {
 
     @Target(AnnotationTarget.PROPERTY)
@@ -42,6 +62,10 @@ class BijectiveReflectiveTypeAdapterFactory(
     annotation class OptionalField
 
     override fun <T : Any?> create(gson: Gson, type: TypeToken<T>): TypeAdapter<T>? {
+        if (classes != null && !classes.contains(type.rawType.kotlin)) {
+            return null
+        }
+
         val delegate = gson.getDelegateAdapter(this, type)
         return (delegate as? ReflectiveTypeAdapterFactory.Adapter)
             ?.let {
@@ -57,6 +81,9 @@ class BijectiveReflectiveTypeAdapterFactory(
     }
 }
 
+/**
+ * A [TypeAdapter] which can [read] JSON objects into instances of [T].
+ */
 private class BijectiveReflectiveTypeAdapter<T>(
     private val gson: Gson,
     private val type: TypeToken<T>,
@@ -133,7 +160,14 @@ private class BijectiveReflectiveTypeAdapter<T>(
                                 "`$name` with value `$jsonValue`"
                         )
                     } else {
-                        // skip past fields on JSON which have no class field when requireAllJsonFieldsUsed is false
+                        // skip past fields on JSON which have no class field when requireAllJsonFieldsUsed is false (or
+                        // when allowUnusedNulls is true and the value is null)
+
+                        // in the null case, read in the next null element
+                        if (!requireAllClassFieldsUsed) {
+                            reader.nextNull()
+                        }
+
                         continue
                     }
 

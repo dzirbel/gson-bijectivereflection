@@ -5,6 +5,7 @@ private object Versions {
     const val detekt = "1.15.0-RC1" // https://github.com/detekt/detekt; also update plugin version
     const val findBugs = "3.0.2" // https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305
     const val gson = "2.8.6" // https://github.com/google/gson
+    const val jacoco = "0.8.6" // https://github.com/jacoco/jacoco
     const val junit = "5.7.0" // https://junit.org/junit5/
     const val kotlinReflect = "1.4.21" // https://kotlinlang.org/docs/reference/reflection.html
     const val truth = "1.1" // https://truth.dev/
@@ -12,6 +13,8 @@ private object Versions {
 
 plugins {
     `java-library`
+
+    jacoco
 
     // https://kotlinlang.org/releases.html
     kotlin("jvm") version "1.4.21"
@@ -53,8 +56,22 @@ configurations.all {
 
 tasks.test {
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
     testLogging {
         events = setOf(TestLogEvent.FAILED, TestLogEvent.STANDARD_ERROR, TestLogEvent.STANDARD_OUT)
+    }
+}
+
+jacoco {
+    toolVersion = Versions.jacoco
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+
+    reports {
+        xml.isEnabled = true
+        csv.isEnabled = false
     }
 }
 

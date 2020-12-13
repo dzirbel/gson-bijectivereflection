@@ -13,6 +13,7 @@ import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
 import java.lang.reflect.Field
+import javax.annotation.Nullable
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.hasAnnotation
@@ -111,8 +112,7 @@ private class BijectiveReflectiveTypeAdapter<T>(
         fields
             .filter { (kProperty, _) ->
                 !kProperty.returnType.isMarkedNullable &&
-                    !kProperty.hasAnnotation<javax.annotation.Nullable>() &&
-                    !kProperty.hasAnnotation<org.jetbrains.annotations.Nullable>() &&
+                    !kProperty.hasAnnotation<Nullable>() &&
                     !kProperty.hasAnnotation<BijectiveReflectiveTypeAdapterFactory.OptionalField>()
             }
             .map { it.second }
@@ -156,7 +156,7 @@ private class BijectiveReflectiveTypeAdapter<T>(
             while (reader.hasNext()) {
                 val name = reader.nextName()
                 val field = fieldFor(name)
-                    ?: if (requireAllJsonFieldsUsed && (allowUnusedNulls || reader.peek() != JsonToken.NULL)) {
+                    ?: if (requireAllJsonFieldsUsed && (!allowUnusedNulls || reader.peek() != JsonToken.NULL)) {
                         val jsonValue = gson.getAdapter(Any::class.java).read(reader)
                         throw JsonSyntaxException(
                             "Model class ${type.type.typeName} does not contain a field for JSON property " +
@@ -166,10 +166,10 @@ private class BijectiveReflectiveTypeAdapter<T>(
                         // skip past fields on JSON which have no class field when requireAllJsonFieldsUsed is false (or
                         // when allowUnusedNulls is true and the value is null)
 
-                        // in the null case, read in the next null element
-                        if (!requireAllClassFieldsUsed) {
-                            reader.nextNull()
-                        }
+                        // read past the next element
+                        val anyType = `$Gson$Types`.resolve(type.type, type.rawType, Any::class.java)
+                        val adapter = gson.getAdapter(TypeToken.get(anyType))
+                        adapter.read(reader)
 
                         continue
                     }

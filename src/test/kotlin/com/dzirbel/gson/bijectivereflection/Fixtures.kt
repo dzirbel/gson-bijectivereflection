@@ -10,7 +10,11 @@ data class TestObject(
 data class TestObjectWithGenerics(
     val stringList: List<String>,
     val testObjects: List<TestObject>
-)
+) {
+    @Suppress("unused")
+    val noBackingField: Int
+        get() = stringList.size
+}
 
 object Fixtures {
     val testObjects: List<Any?> = listOf(

@@ -18,6 +18,9 @@ import javax.annotation.Nullable;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * A simple test for Java compatibility, i.e that Java classes (with @Nullable) can be deserialized.
+ */
 class JavaTest {
     static class TestObject {
         final String stringField;

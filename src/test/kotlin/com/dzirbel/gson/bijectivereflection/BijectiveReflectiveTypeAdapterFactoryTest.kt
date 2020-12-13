@@ -9,7 +9,6 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import kotlin.reflect.jvm.jvmName
 
-// TODO test write() delegation
 // TODO test all parameter combinations
 // TODO test SerializedName
 // TODO test OptionalField
@@ -46,18 +45,6 @@ internal class BijectiveReflectiveTypeAdapterFactoryTest {
         val expectedClass: Class<*> = expectedValue?.let { it::class.java } ?: Any::class.java,
         val sameInstance: Boolean = false,
         val parameters: Parameters = Parameters()
-    )
-
-    private data class TestObject(
-        val stringField: String,
-        val intField: Int,
-        val nullableStringField: String? = null,
-        val nestedObject: TestObject? = null
-    )
-
-    private data class TestObjectWithGenerics(
-        val stringList: List<String>,
-        val testObjects: List<TestObject>
     )
 
     private val baseGson = Gson()
@@ -115,40 +102,7 @@ internal class BijectiveReflectiveTypeAdapterFactoryTest {
         @JvmStatic
         @Suppress("unused")
         fun successCases(): List<SuccessCase> {
-            return listOf(
-                // test primitives are delegated correctly
-                SuccessCase(input = null, expectedValue = null, sameInstance = true),
-                SuccessCase(input = 1, sameInstance = true),
-                SuccessCase(input = 0, sameInstance = true),
-                SuccessCase(input = ""),
-                SuccessCase(input = listOf<Any>()),
-                SuccessCase(input = arrayListOf("a", "b")),
-
-                // test reflection
-                SuccessCase(input = TestObject(stringField = "abc", intField = 123)),
-                SuccessCase(input = TestObject(stringField = "abc", intField = 123, nullableStringField = "xyz")),
-                SuccessCase(
-                    input = TestObject(
-                        stringField = "abc",
-                        intField = 123,
-                        nestedObject = TestObject(stringField = "nested", intField = 42)
-                    )
-                ),
-                SuccessCase(
-                    input = TestObjectWithGenerics(
-                        stringList = listOf("a", "b"),
-                        testObjects = listOf(
-                            TestObject(stringField = "abc", intField = 123),
-                            TestObject(stringField = "abc", intField = 123, nullableStringField = "xyz"),
-                            TestObject(
-                                stringField = "abc",
-                                intField = 123,
-                                nestedObject = TestObject(stringField = "nested", intField = 42)
-                            ),
-                        )
-                    )
-                ),
-            )
+            return Fixtures.testObjects.map { SuccessCase(input = it, sameInstance = it == null || it is Int) }
         }
     }
 }

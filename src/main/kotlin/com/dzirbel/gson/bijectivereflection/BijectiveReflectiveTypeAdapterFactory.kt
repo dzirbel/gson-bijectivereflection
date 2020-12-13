@@ -32,7 +32,8 @@ class BijectiveReflectiveTypeAdapterFactory(
     /**
      * Requires that every member field of a destination class is required to be present in the JSON; default true.
      *
-     * Nullable fields or fields annotated with [OptionalField] are omitted.
+     * Nullable fields (either Kotlin nullable or annotated with either [javax.annotation.Nullable] or
+     * [org.jetbrains.annotations.Nullable]) or fields annotated with [OptionalField] are omitted.
      */
     private val requireAllClassFieldsUsed: Boolean = true,
 
@@ -57,7 +58,7 @@ class BijectiveReflectiveTypeAdapterFactory(
     private val classes: Set<KClass<*>>? = null
 ) : TypeAdapterFactory {
 
-    @Target(AnnotationTarget.PROPERTY)
+    @Target(AnnotationTarget.PROPERTY, AnnotationTarget.FIELD)
     @Retention(AnnotationRetention.RUNTIME)
     annotation class OptionalField
 
@@ -110,6 +111,8 @@ private class BijectiveReflectiveTypeAdapter<T>(
         fields
             .filter { (kProperty, _) ->
                 !kProperty.returnType.isMarkedNullable &&
+                    !kProperty.hasAnnotation<javax.annotation.Nullable>() &&
+                    !kProperty.hasAnnotation<org.jetbrains.annotations.Nullable>() &&
                     !kProperty.hasAnnotation<BijectiveReflectiveTypeAdapterFactory.OptionalField>()
             }
             .map { it.second }

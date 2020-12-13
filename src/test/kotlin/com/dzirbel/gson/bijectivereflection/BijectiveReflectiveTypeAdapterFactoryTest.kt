@@ -14,7 +14,6 @@ import kotlin.reflect.jvm.jvmName
 // TODO test SerializedName
 // TODO test OptionalField
 // TODO add more complicated test cases (Maps, large classes, etc)
-// TODO test Java classes
 internal class BijectiveReflectiveTypeAdapterFactoryTest {
     data class Parameters(
         val requireAllClassFieldsUsed: Boolean = true,

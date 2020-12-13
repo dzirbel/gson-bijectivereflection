@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 private object Versions {
     const val detekt = "1.15.0-RC1" // https://github.com/detekt/detekt; also update plugin version
+    const val findBugs = "3.0.2" // https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305
     const val gson = "2.8.6" // https://github.com/google/gson
     const val junit = "5.7.0" // https://junit.org/junit5/
     const val kotlinReflect = "1.4.21" // https://kotlinlang.org/docs/reference/reflection.html
@@ -10,6 +11,8 @@ private object Versions {
 }
 
 plugins {
+    `java-library`
+
     // https://kotlinlang.org/releases.html
     kotlin("jvm") version "1.4.21"
 
@@ -27,6 +30,7 @@ repositories {
 dependencies {
     implementation("com.google.code.gson", "gson", Versions.gson)
     implementation("org.jetbrains.kotlin", "kotlin-reflect", Versions.kotlinReflect)
+    implementation("com.google.code.findbugs", "jsr305", Versions.findBugs)
 
     testImplementation("org.junit.jupiter", "junit-jupiter-api", Versions.junit)
     testImplementation("org.junit.jupiter", "junit-jupiter-params", Versions.junit)

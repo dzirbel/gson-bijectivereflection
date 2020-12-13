@@ -1,7 +1,7 @@
 # Gson Bijective Reflection
 
-`gson-bijectivereflection` is an extension to [Gson](https://github.com/google/gson) for Kotlin
-which adds stricter deserialization of user-provided classes.
+`gson-bijectivereflection` is an extension to [Gson](https://github.com/google/gson) for Kotlin and
+Java which adds stricter deserialization of user-provided classes.
 
 It adds a `BijectiveReflectiveTypeAdapterFactory` which requires that JSON deserialization of
 classes is _bijective_:
@@ -120,6 +120,22 @@ class Example4(val stringField: String, val intField: Int)
 IS NOT bijective, since `Example4.intField` does not have a value in the JSON. By default `Gson`
 would leave `intField` as `null`, which can lead to unexpected `NullPointerException`s in Kotlin,
 since it is of the non-nullable type `Int`.
+
+---
+
+```
+// Java class:
+class Example5 {
+    String stringField;
+    @Nullable nullableString;
+}
+
+// JSON:
+{ stringField: "string value" }
+```
+
+IS bijective, since `@Nullable` can be used like Kotlin nullability to denote that the field is
+not required in the JSON.
 
 ## License
 

@@ -1,4 +1,4 @@
-package com.dzirbel.gson.bijectivereflection
+package io.github.dzirbel.gson.bijectivereflection
 
 data class TestObject(
     val stringField: String,

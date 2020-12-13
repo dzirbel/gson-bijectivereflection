@@ -59,7 +59,7 @@ Maven:
 To apply the `BijectiveReflectiveTypeAdapterFactory`, supply it when building your `Gson` object:
 
 ```
-import com.dzirbel.gson.bijectivereflection.BijectiveReflectiveTypeAdapterFactory
+import io.github.dzirbel.gson.bijectivereflection.BijectiveReflectiveTypeAdapterFactory
 
 val gson = GsonBuilder()
     .registerTypeAdapterFactory(BijectiveReflectiveTypeAdapterFactory())

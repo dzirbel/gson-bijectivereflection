@@ -1,4 +1,4 @@
-package com.dzirbel.gson.bijectivereflection
+package io.github.dzirbel.gson.bijectivereflection
 
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException

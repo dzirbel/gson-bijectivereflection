@@ -1,4 +1,4 @@
-package com.dzirbel.gson.bijectivereflection
+package io.github.dzirbel.gson.bijectivereflection
 
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.Gson

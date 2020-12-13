@@ -32,7 +32,7 @@ Gradle (Groovy DSL):
 
 ```
 dependencies {
-    implementation 'io.github.dzirbel.gson-bijectivereflection:1.0.0'
+    implementation 'io.github.dzirbel.gson-bijectivereflection:2.0.0'
 }
 ```
 
@@ -40,7 +40,7 @@ Gradle (Kotlin DSL):
 
 ```
 dependencies {
-    implementation("io.github.dzirbel.gson-bijectivereflection:1.0.0")
+    implementation("io.github.dzirbel.gson-bijectivereflection:2.0.0")
 }
 ```
 
@@ -50,7 +50,7 @@ Maven:
 <dependency>
     <groupId>io.github.dzirbel</groupId>
     <artifactId>gson-bijectivereflection</artifactId>
-    <version>1.0.0</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 

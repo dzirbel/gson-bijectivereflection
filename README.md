@@ -1,5 +1,8 @@
 # Gson Bijective Reflection
 
+![Build](https://github.com/dzirbel/gson-bijectivereflection/workflows/Build/badge.svg)
+[![codecov](https://codecov.io/gh/dzirbel/gson-bijectivereflection/branch/main/graph/badge.svg?token=HEXBHVPVXN)](https://codecov.io/gh/dzirbel/gson-bijectivereflection)
+
 `gson-bijectivereflection` is an extension to [Gson](https://github.com/google/gson) for Kotlin and
 Java which adds stricter deserialization of user-provided classes.
 

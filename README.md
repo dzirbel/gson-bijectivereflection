@@ -127,7 +127,7 @@ since it is of the non-nullable type `Int`.
 // Java class:
 class Example5 {
     String stringField;
-    @Nullable nullableString;
+    @Nullable String nullableString;
 }
 
 // JSON:

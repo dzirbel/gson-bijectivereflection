@@ -2,6 +2,7 @@
 
 ![Build](https://github.com/dzirbel/gson-bijectivereflection/workflows/Build/badge.svg)
 [![codecov](https://codecov.io/gh/dzirbel/gson-bijectivereflection/branch/main/graph/badge.svg?token=HEXBHVPVXN)](https://codecov.io/gh/dzirbel/gson-bijectivereflection)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.dzirbel/gson-bijectivereflection)](https://search.maven.org/artifact/io.github.dzirbel/gson-bijectivereflection)
 
 `gson-bijectivereflection` is an extension to [Gson](https://github.com/google/gson) for Kotlin and
 Java which adds stricter deserialization of user-provided classes.
@@ -27,13 +28,11 @@ restrict its usage in space-constrained contexts, such as Android apps.
 
 ## Download
 
-<!-- TODO finalize groupId/artifactId/version -->
-
 Gradle (Groovy DSL):
 
 ```
 dependencies {
-    implementation 'com.dzirbel.gson-bijectivereflection:0.0.0'
+    implementation 'io.github.dzirbel.gson-bijectivereflection:1.0.0'
 }
 ```
 
@@ -41,7 +40,7 @@ Gradle (Kotlin DSL):
 
 ```
 dependencies {
-    implementation("com.dzirbel.gson-bijectivereflection:0.0.0")
+    implementation("io.github.dzirbel.gson-bijectivereflection:1.0.0")
 }
 ```
 
@@ -49,13 +48,11 @@ Maven:
 
 ```
 <dependency>
-    <groupId>com.dzirbel</groupId>
+    <groupId>io.github.dzirbel</groupId>
     <artifactId>gson-bijectivereflection</artifactId>
-    <version>0.0.0</version>
+    <version>1.0.0</version>
 </dependency>
 ```
-
-<!-- TODO direct JAR download -->
 
 ## Usage
 

@@ -16,14 +16,16 @@ plugins {
 
     jacoco
 
+    `maven-publish`
+
+    signing
+
     // https://kotlinlang.org/releases.html
     kotlin("jvm") version "1.4.21"
 
     // https://github.com/detekt/detekt; also update dependency version
     id("io.gitlab.arturbosch.detekt") version "1.15.0-RC1"
 }
-
-version = "0.1"
 
 repositories {
     mavenCentral()
@@ -78,4 +80,64 @@ tasks.jacocoTestReport {
 detekt {
     input = files("src/main/kotlin", "src/test/kotlin")
     config = files("detekt-config.yml")
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "io.github.dzirbel"
+            artifactId = rootProject.name
+            version = "1.0.0"
+
+            from(components["java"])
+
+            pom {
+                name.set("Gson Bijective Reflection")
+                description.set("Gson extension for stricter class deserialization in Kotlin and Java")
+                url.set("https://github.com/dzirbel/gson-bijectivereflection")
+
+                licenses {
+                    license {
+                        name.set("MIT License")
+                        url.set("http://www.opensource.org/licenses/mit-license")
+                    }
+                }
+
+                developers {
+                    developer {
+                        id.set("dzirbel")
+                        name.set("Dominic Zirbel")
+                        email.set("dominiczirbel@gmail.com")
+                    }
+                }
+
+                scm {
+                    connection.set("scm:git:git://github.com:dzirbel/gson-bijectivereflection.git")
+                    developerConnection.set("scm:git:ssh://github.com:dzirbel/gson-bijectivereflection.git")
+                    url.set("https://github.com/dzirbel/gson-bijectivereflection")
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "mavenCentralStaging"
+            setUrl("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+
+            credentials {
+                username = project.findProperty("ossrhUsername") as? String
+                password = project.findProperty("ossrhPassword") as? String
+            }
+        }
+    }
+}
+
+signing {
+    sign(publishing.publications["maven"])
 }

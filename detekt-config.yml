@@ -572,6 +572,8 @@ style:
     active: true
   RedundantExplicitType:
     active: true
+  RedundantHigherOrderMapUsage:
+    active: true
   RedundantVisibilityModifierRule:
     active: true
   ReturnCount:

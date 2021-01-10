@@ -2,7 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 private object Versions {
-    const val detekt = "1.15.0-RC1" // https://github.com/detekt/detekt; also update plugin version
+    const val detekt = "1.15.0" // https://github.com/detekt/detekt; also update plugin version
     const val findBugs = "3.0.2" // https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305
     const val gson = "2.8.6" // https://github.com/google/gson
     const val jacoco = "0.8.6" // https://github.com/jacoco/jacoco
@@ -24,7 +24,7 @@ plugins {
     kotlin("jvm") version "1.4.21"
 
     // https://github.com/detekt/detekt; also update dependency version
-    id("io.gitlab.arturbosch.detekt") version "1.15.0-RC1"
+    id("io.gitlab.arturbosch.detekt") version "1.15.0"
 }
 
 repositories {

@@ -14,6 +14,5 @@ jobs:
       with:
         java-version: 11.0.9
 
-    - run: chmod +x ./gradlew
     - run: ./gradlew --no-daemon --stacktrace --console=plain check
     - run: bash <(curl -s https://codecov.io/bash)

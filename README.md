@@ -81,7 +81,7 @@ class Example1(val stringField: String, val intField: Int)
 { stringField: "string value", intField: 123 }
 ```
 
-IS bijective.
+✅ IS bijective.
 
 ---
 
@@ -93,7 +93,7 @@ class Example2(val stringField: String, val intField: Int, val nullableStringFie
 { stringField: "string value", intField: 123 }
 ```
 
-IS still bijective, since `nullableStringField` has a nullable type `String?`.
+✅ IS still bijective, since `nullableStringField` has a nullable type `String?`.
 
 ---
 
@@ -105,7 +105,7 @@ class Example3(val stringField: String, val intField: Int)
 { stringField: "string value", intField: 123, anotherField: ["another", "value"] }
 ```
 
-IS NOT bijective, since `anotherField` does not have a corresponding field in `Example3`.
+❌ IS NOT bijective, since `anotherField` does not have a corresponding field in `Example3`.
 
 ---
 
@@ -117,7 +117,7 @@ class Example4(val stringField: String, val intField: Int)
 { stringField: "string value" }
 ```
 
-IS NOT bijective, since `Example4.intField` does not have a value in the JSON. By default `Gson`
+❌ IS NOT bijective, since `Example4.intField` does not have a value in the JSON. By default `Gson`
 would leave `intField` as `null`, which can lead to unexpected `NullPointerException`s in Kotlin,
 since it is of the non-nullable type `Int`.
 
@@ -134,7 +134,7 @@ class Example5 {
 { stringField: "string value" }
 ```
 
-IS bijective, since `@Nullable` can be used like Kotlin nullability to denote that the field is
+✅ IS bijective, since `@Nullable` can be used like Kotlin nullability to denote that the field is
 not required in the JSON.
 
 ## License

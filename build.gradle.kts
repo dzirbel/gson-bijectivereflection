@@ -8,7 +8,7 @@ private object Versions {
     const val jacoco = "0.8.6" // https://github.com/jacoco/jacoco
     const val junit = "5.7.0" // https://junit.org/junit5/
     const val kotlinReflect = "1.4.21" // https://kotlinlang.org/docs/reference/reflection.html
-    const val truth = "1.1" // https://truth.dev/
+    const val truth = "1.1.2" // https://truth.dev/
 }
 
 plugins {
